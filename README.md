@@ -3,10 +3,11 @@ Projeto banco de dados 2
 
 Tema: Sistema para gerenciar uma loja de varejo.
 
-Modelo conceitual:
+# Modelo conceitual:
 
+![image](https://github.com/Mateus-Mannes/projeto-ban-2/assets/64140337/a65497fa-2fc8-4bfe-90b6-4b8f72051e9f)
 
-![Captura de tela 2024-04-01 204301](https://github.com/Mateus-Mannes/projeto-ban-2/assets/64140337/1766145d-0531-4372-9fb5-f62023174cec)
+# Modelo lógico:
 
 Endereco (#Id, Cidade, Bairro, Rua, Numero, Estado)
 
