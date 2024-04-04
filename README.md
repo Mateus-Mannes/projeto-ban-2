@@ -13,7 +13,7 @@ Endereco (#Id, Cidade, Bairro, Rua, Numero, Estado)
 
 Fornecedor (#Id, [Cnpj], Email, Telefone, &EnderecoId)
 
-Compra (Id, Nfe, Data, ValorTotal, &FornecedorId)
+Compra (#Id, Nfe, Data, ValorTotal, &FornecedorId)
 
 Produto (#Id, &CatalogoProdutoId, DataFabricacao, [DataValidade], DataEntrega, ValorUnitarioCompra, &CompraId, [&VendaId])
 
