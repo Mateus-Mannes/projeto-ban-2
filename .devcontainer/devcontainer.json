@@ -1,7 +1,8 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "dockerComposeFile": "docker-compose.yml",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "service": "app",
   "features": {
-    "ghcr.io/devcontainers/features/dotnet:2": {},
-    "ghcr.io/itsmechlark/features/postgresql:1": {}
+    "ghcr.io/devcontainers/features/dotnet:2": {}
   }
 }
