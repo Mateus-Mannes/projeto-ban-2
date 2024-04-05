@@ -27,3 +27,7 @@ CatalogoProduto (#Id, Nome, Descricao, Preco, &CategoriaId)
 
 Categoria (#Id, Nome)
 
+## Acessar postgres:
+```bash
+psql -h db -U postgres -d postgres
+```
