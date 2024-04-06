@@ -2,6 +2,7 @@
   "dockerComposeFile": "docker-compose.yml",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "service": "app",
+  "postCreateCommand": "./.devcontainer/setup.sh",
   "features": {
     "ghcr.io/devcontainers/features/dotnet:2": {}
   }
