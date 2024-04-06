@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace GestaoVarejo.Domain;
 
+[Table("endereco")]
 public class Endereco 
 {
     public int Id { get; set; }

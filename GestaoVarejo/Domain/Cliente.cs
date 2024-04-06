@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace GestaoVarejo.Domain;
 
+[Table("cliente")]
 public class Cliente
 {
     public int Id { get; set; }

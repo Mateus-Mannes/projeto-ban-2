@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace GestaoVarejo.Domain;
 
+[Table("funcionario")]
 public class Funcionario
 {
     public int Id { get; set; }
