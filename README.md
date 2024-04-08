@@ -27,10 +27,6 @@ CatalogoProduto (#Id, Nome, Descricao, Preco, &CategoriaId)
 
 Categoria (#Id, Nome)
 
-# Modelo Lógico de Banco de Dados
-
-Este documento descreve o modelo lógico de um banco de dados com suas tabelas, campos e restrições.
-
 ## Tabelas e Descrições
 
 ### Tabela: Endereco
