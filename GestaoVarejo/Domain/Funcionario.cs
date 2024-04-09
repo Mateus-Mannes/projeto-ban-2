@@ -1,15 +1,31 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GestaoVarejo.Domain;
 
 [Table("funcionario")]
+[Display(Name = "Funcionário")]
 public class Funcionario
 {
+    [Column("id")]
+    [Display(Name = "Id")]
     public int Id { get; set; }
-    public string? Cpf { get; set; }
-    public string? Nome { get; set; }
-    public string? UltimoNome { get; set; }
+    [Column("cpf")]
+    [Display(Name = "CPF")]
+    public string Cpf { get; set; } = string.Empty;
+    [Column("nome")]
+    [Display(Name = "Nome")]
+    public string Nome { get; set; } = string.Empty;
+    [Column("ultimo_nome")]
+    [Display(Name = "Último Nome")]
+    public string UltimoNome { get; set; } = string.Empty;
+    [Column("telefone")]
+    [Display(Name = "Telefone")]
     public decimal Salario { get; set; }
-    public string? Email { get; set; }
+    [Column("email")]
+    [Display(Name = "Email")]
+    public string Email { get; set; } = string.Empty;
+    [Column("endereco_id")]
+    [Display(Name = "Endereço")]
     public int EnderecoId { get; set; }
 }

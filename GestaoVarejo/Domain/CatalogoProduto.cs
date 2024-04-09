@@ -1,13 +1,25 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GestaoVarejo.Domain;
 
 [Table("catalogo_produto")]
+[Display(Name = "Catálogo De Produtos")]
 public class CatalogoProduto
 {
+    [Column("id")]
+    [Display(Name = "Id")]
     public int Id { get; set; }
-    public string? Nome { get; set; }
-    public string? Descricao { get; set; }
+    [Column("nome")]
+    [Display(Name = "Nome")]
+    public string Nome { get; set; } = string.Empty;
+    [Column("descricao")]
+    [Display(Name = "Descrição")]
+    public string Descricao { get; set; } = string.Empty;
+    [Column("preco")]
+    [Display(Name = "Preço")]
     public decimal Preco { get; set; }
+    [Column("categoria_id")]
+    [Display(Name = "Categoria")]
     public int CategoriaId { get; set; }
 }
