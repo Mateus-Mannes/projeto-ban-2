@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using Dapper;
+using Npgsql;
 
 // See https://aka.ms/new-console-template for more information
 Console.WriteLine("Iniciando sistema ...");
