@@ -5,8 +5,8 @@ namespace GestaoVarejo.Domain;
 
 [Table("compra")]
 [Display(Name = "Compra")]
-public class Compra 
-{
+public class Compra : QueryableEntity
+{ 
     [Column("id")]
     [Display(Name = "Id")]
     public int Id { get; set; }

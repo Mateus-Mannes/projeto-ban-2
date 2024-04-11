@@ -5,7 +5,7 @@ namespace GestaoVarejo.Domain;
 
 [Table("fornecedor")]
 [Display(Name = "Fornecedor")]
-public class Fornecedor
+public class Fornecedor : QueryableEntity
 {
     [Column("id")]
     [Display(Name = "Id")]
