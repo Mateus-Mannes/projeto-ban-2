@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
+using System.Reflection;
 using Dapper;
 
 namespace GestaoVarejo;
@@ -29,5 +31,35 @@ public class Repository
         }
 
         return entities;
+    }
+
+    public void Create<T>(string[] values) where T : QueryableEntity, new()
+    {
+        var tableName = QueryableEntity.TableName<T>();
+
+        var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.Name != "Id");
+
+        var columns = string.Join(", ", properties.Select(p => p.GetCustomAttribute<ColumnAttribute>()!.Name));
+
+        var parameterNames = string.Join(", ", properties.Select((p, index) => $"@param{index}"));
+
+        var query = $"INSERT INTO {tableName} ({columns}) VALUES ({parameterNames})";
+
+        // Cria um dicionário para mapear os valores aos parâmetros
+        var parameterDictionary = new DynamicParameters();
+        int i = 0;
+        foreach (var property in properties)
+        {
+            if (i < values.Length)
+            {
+                var propertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
+                // Converte o valor para o tipo correto da propriedade, tratando nulls de forma apropriada
+                var safeValue = (values[i] == null) ? null : Convert.ChangeType(values[i], propertyType);
+                parameterDictionary.Add($"param{i}", safeValue);
+            }
+            i++;
+        }
+        
+        _connection.Execute(query, parameterDictionary);
     }
 }
