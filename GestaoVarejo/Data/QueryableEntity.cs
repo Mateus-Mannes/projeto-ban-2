@@ -1,6 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Reflection;
+using System.Text;
 
 namespace GestaoVarejo;
 
@@ -64,5 +66,30 @@ public class QueryableEntity
 
             property.SetValue(this, value);
         }
+    }
+
+
+    public string ToDisplayString()
+    {
+        var properties = this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        var sb = new StringBuilder();
+
+        foreach (var property in properties)
+        {
+            var displayAttribute = property.GetCustomAttributes(typeof(DisplayAttribute), true)
+                .FirstOrDefault() as DisplayAttribute;
+
+            var displayName = displayAttribute != null ? displayAttribute.Name : property.Name;
+            var value = property.GetValue(this, null) ?? "null";
+
+            sb.Append($"{displayName}: {value}, ");
+        }
+
+        if (sb.Length > 0)
+        {
+            sb.Remove(sb.Length - 2, 2);
+        }
+
+        return sb.ToString();
     }
 }

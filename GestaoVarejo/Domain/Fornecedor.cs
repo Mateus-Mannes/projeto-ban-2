@@ -20,6 +20,6 @@ public class Fornecedor : QueryableEntity
     [Display(Name = "Telefone")]
     public string Telefone { get; set; } = string.Empty;
     [Column("endereco_id")]
-    [Display(Name = "Endereço")]
+    [Display(Name = "Endereço Id")]
     public int EnderecoId { get; set; }
 }

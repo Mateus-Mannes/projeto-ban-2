@@ -1,89 +1,50 @@
-﻿using Dapper;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+using Dapper;
 using GestaoVarejo;
 using GestaoVarejo.Domain;
 using Npgsql;
 
-// See https://aka.ms/new-console-template for more information
+
 Console.WriteLine("Iniciando sistema ...");
 
 var connString = "Host=db;Username=postgres;Password=postgres;Database=gv";
 var dataSourceBuilder = new NpgsqlDataSourceBuilder(connString);
 var dataSource = dataSourceBuilder.Build();
 var conn = await dataSource.OpenConnectionAsync();
-
 var repository = new Repository(conn);
-var categorias = repository.GetAll<Categoria>();
 
-// Example 1: Print category names
-Console.WriteLine("Example 1: Print category names");
-foreach (var categoria in categorias)
+var entityTypes = Assembly.GetExecutingAssembly().GetTypes()
+    .Where(t => t.IsSubclassOf(typeof(QueryableEntity)) && !t.IsAbstract);
+
+var displayNames = new List<string>(); 
+foreach (var type in entityTypes) 
+    displayNames.Add(type.GetCustomAttribute<DisplayAttribute>()?.Name ?? type.Name);
+
+while (true)
 {
-    Console.WriteLine(categoria.Nome);
+    Console.WriteLine("\nSelecione uma entidade para ler:");
+
+    int index = 1;
+    foreach (var displayName in displayNames) Console.WriteLine($"{index++}. {displayName}");
+    Console.WriteLine($"{index}. Sair");
+
+    if (int.TryParse(Console.ReadLine(), out int choice) && choice == index)
+    {
+        break; // Sair se a escolha for igual ao último índice
+    }
+
+    if (choice >= 1 && choice < index)
+    {
+        Console.WriteLine();
+        var selectedType = entityTypes.ElementAt(choice - 1);
+        var method = typeof(ConsoleHelper).GetMethod(nameof(ConsoleHelper.PrintEntityData))!
+            .MakeGenericMethod(new Type[] { selectedType });
+        method.Invoke(null, new object[] { repository, displayNames[choice - 1]});
+    }
+    else
+    {
+        Console.WriteLine("Opção inválida. Tente novamente.");
+    }
 }
-
-// Example 2: Print product names
-Console.WriteLine("Example 2: Print product names");
-var catalogos = repository.GetAll<CatalogoProduto>();
-foreach (var produto in catalogos)
-{
-    Console.WriteLine(produto.Nome);
-}
-
-// Example 3: Print client names
-Console.WriteLine("Example 3: Print client names");
-var clientes = repository.GetAll<Cliente>();
-foreach (var e in clientes)
-{
-    Console.WriteLine(e.Nome);
-}
-
-// Example 4: Print supplier CNPJs
-Console.WriteLine("Example 4: Print supplier CNPJs");
-var fornecedores = repository.GetAll<Fornecedor>();
-foreach (var fornecedor in fornecedores)
-{
-    Console.WriteLine(fornecedor.Cnpj);
-}
-
-// Example 5: Print product IDs
-Console.WriteLine("Example 5: Print product IDs");
-var produtos = repository.GetAll<Produto>();
-foreach (var produto in produtos)
-{
-    Console.WriteLine(produto.Id);
-}
-
-// Example 6: Print sale IDs
-Console.WriteLine("Example 6: Print sale IDs");
-var vendas = repository.GetAll<Venda>();
-foreach (var venda in vendas)
-{
-    Console.WriteLine(venda.Id);
-}
-
-// Example 7: Print address streets
-Console.WriteLine("Example 7: Print address streets");
-var enderecos = repository.GetAll<Endereco>();
-foreach (var e in enderecos)
-{
-    Console.WriteLine(e.Rua);
-}
-
-// Example 8: Print purchase NFEs
-Console.WriteLine("Example 8: Print purchase NFEs");
-var compras = repository.GetAll<Compra>();
-foreach (var e in compras)
-{
-    Console.WriteLine(e.Nfe);
-}
-
-// Example 9: Print employee emails
-Console.WriteLine("Example 9: Print employee emails");
-var funcionarios = repository.GetAll<Funcionario>();
-foreach (var e in funcionarios)
-{
-    Console.WriteLine(e.Email);
-}
-
-
 

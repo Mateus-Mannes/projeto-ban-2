@@ -20,6 +20,6 @@ public class Compra : QueryableEntity
     [Display(Name = "Valor Total")]
     public decimal ValorTotal { get; set; }
     [Column("fornecedor_id")]
-    [Display(Name = "Fornecedor")]
+    [Display(Name = "Fornecedor Id")]
     public int FornecedorId { get; set; }
 }

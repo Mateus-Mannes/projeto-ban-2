@@ -26,6 +26,6 @@ public class Cliente : QueryableEntity
     [Display(Name = "Email")]
     public string Email { get; set; } = string.Empty;
     [Column("endereco_id")]
-    [Display(Name = "Endereço")]
+    [Display(Name = "Endereço Id")]
     public int EnderecoId { get; set; }
 }

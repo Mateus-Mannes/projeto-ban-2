@@ -20,6 +20,6 @@ public class CatalogoProduto : QueryableEntity
     [Display(Name = "Preço")]
     public decimal Preco { get; set; }
     [Column("categoria_id")]
-    [Display(Name = "Categoria")]
+    [Display(Name = "Categoria Id")]
     public int CategoriaId { get; set; }
 }

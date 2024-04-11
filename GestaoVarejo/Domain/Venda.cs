@@ -20,9 +20,9 @@ public class Venda : QueryableEntity
     [Display(Name = "Valor Total")]
     public decimal ValorTotal { get; set; }
     [Column("cliente_id")]
-    [Display(Name = "Cliente")]
+    [Display(Name = "Cliente Id")]
     public int ClienteId { get; set; }
     [Column("funcionario_id")]
-    [Display(Name = "Funcionário")]
+    [Display(Name = "Funcionário Id")]
     public int FuncionarioId { get; set; }
 }
