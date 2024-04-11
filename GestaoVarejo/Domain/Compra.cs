@@ -21,5 +21,6 @@ public class Compra : QueryableEntity
     public decimal ValorTotal { get; set; }
     [Column("fornecedor_id")]
     [Display(Name = "Fornecedor Id")]
+    [Fk<Fornecedor>]
     public int FornecedorId { get; set; }
 }

@@ -21,5 +21,6 @@ public class CatalogoProduto : QueryableEntity
     public decimal Preco { get; set; }
     [Column("categoria_id")]
     [Display(Name = "Categoria Id")]
+    [Fk<Categoria>]
     public int CategoriaId { get; set; }
 }

@@ -27,8 +27,10 @@ public class Produto  : QueryableEntity
     public decimal ValorUnitarioCompra { get; set; }
     [Column("compra_id")]
     [DisplayName("Compra Id")]
+    [Fk<Compra>]
     public int CompraId { get; set; } 
     [Column("venda_id")]
     [DisplayName("Venda Id")]
+    [Fk<Venda>]
     public int? VendaId { get; set; }
 }

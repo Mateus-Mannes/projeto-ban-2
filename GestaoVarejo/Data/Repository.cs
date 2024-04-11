@@ -33,7 +33,7 @@ public class Repository
         return entities;
     }
 
-    public void Create<T>(string[] values) where T : QueryableEntity, new()
+    public void Create<T>(string[] values) where T : QueryableEntity
     {
         var tableName = QueryableEntity.TableName<T>();
 

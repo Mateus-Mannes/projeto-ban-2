@@ -21,5 +21,6 @@ public class Fornecedor : QueryableEntity
     public string Telefone { get; set; } = string.Empty;
     [Column("endereco_id")]
     [Display(Name = "Endereço Id")]
+    [Fk<Endereco>]
     public int EnderecoId { get; set; }
 }

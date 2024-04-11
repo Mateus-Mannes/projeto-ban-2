@@ -22,7 +22,7 @@ public class QueryableEntity
             var property = properties[i];
             var propertyType = property.PropertyType;
             string stringValue = values[i];
-            object value = null;
+            object value = null!;
 
             if (Nullable.GetUnderlyingType(propertyType) != null && !string.IsNullOrEmpty(stringValue))
             {
