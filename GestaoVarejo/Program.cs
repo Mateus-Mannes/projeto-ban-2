@@ -26,6 +26,7 @@ while (true)
     Console.WriteLine("\nEscolha uma opção:");
     Console.WriteLine("1. Consultar entidade");
     Console.WriteLine("2. Criar registro de entidade");
+    Console.WriteLine("4. Deletar entidade");
     Console.WriteLine("3. Sair");
     Console.Write("Sua escolha: ");
     
@@ -39,6 +40,9 @@ while (true)
             break;
         case "2":
             CriarRegistroEntidade(repository);
+            break;
+        case "4":
+            DeletarEntidade(repository);
             break;
         default:
             Console.WriteLine("Opção inválida. Tente novamente.");
@@ -98,6 +102,61 @@ void CriarRegistroEntidade(Repository repository)
         {
             Console.WriteLine("Não foi possível criar a entidade. Verifique se os dados foram preenchidos corretamente.");
         }
+    }
+    else
+    {
+        Console.WriteLine("Opção inválida. Tente novamente.");
+    }
+}
+
+void DeletarEntidade(Repository repository)
+{
+    Console.WriteLine("\nSelecione uma entidade para deletar:");
+
+    int index = 1;
+    foreach (var displayName in displayNames) Console.WriteLine($"{index++}. {displayName}");
+    Console.WriteLine($"{index}. Sair");
+    Console.Write("Sua escolha: ");
+
+    int.TryParse(Console.ReadLine(), out int consulta);
+
+    if (consulta >= 1 && consulta < index)
+    {
+        Console.WriteLine();
+        var selectedType = entityTypes.ElementAt(consulta - 1);
+        var method = typeof(ConsoleHelper).GetMethod(nameof(ConsoleHelper.PrintEntityData))!
+            .MakeGenericMethod(new Type[] { selectedType });
+        method.Invoke(null, new object[] { repository, displayNames[consulta - 1]});
+
+        Console.Write("Escreva o Id do registro para deleção: ");
+        if(!int.TryParse(Console.ReadLine(), out int id))
+        {
+            Console.WriteLine("Opção inválida. Tente novamente.");
+            return;
+        }
+
+        method = typeof(Repository).GetMethod(nameof(Repository.Delete))!.MakeGenericMethod(new Type[] { selectedType });
+        try 
+        {
+            method.Invoke(repository, new object[] { id });
+        }
+        catch (Npgsql.PostgresException ex)
+        {
+            // verificar isso aqui
+            if (ex.SqlState == "23503")
+            {
+                Console.WriteLine("Não foi possível deletar o registro pois ele está sendo referenciado por outra tabela.");
+            }
+            else
+            {
+                throw;
+            }
+        }
+        catch
+        {
+            Console.WriteLine("Não foi possível deletar a entidade. Verifique se o Id foi informado corretamente.");
+        }
+
     }
     else
     {

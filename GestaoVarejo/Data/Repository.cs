@@ -62,4 +62,12 @@ public class Repository
         
         _connection.Execute(query, parameterDictionary);
     }
+
+    public void Delete<T>(int id) where T : QueryableEntity
+    {
+        var tableName = QueryableEntity.TableName<T>();
+        var query = $"DELETE FROM {tableName} WHERE Id = @Id";
+
+        _connection.Execute(query, new { Id = id });
+    }
 }
