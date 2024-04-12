@@ -9,7 +9,7 @@ public class Cliente : QueryableEntity
 {
     [Column("id")]
     [Display(Name = "Id")]
-    public int Id { get; set; }
+    public override int Id { get; set; }
     [Column("cpf")]
     [Display(Name = "CPF")]
     public string Cpf { get; set; } = string.Empty;

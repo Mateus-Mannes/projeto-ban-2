@@ -24,14 +24,15 @@ foreach (var type in entityTypes)
 while (true)
 {
     Console.WriteLine("\nEscolha uma opção:");
-    Console.WriteLine("1. Consultar entidade");
-    Console.WriteLine("2. Criar registro de entidade");
-    Console.WriteLine("4. Deletar entidade");
-    Console.WriteLine("3. Sair");
+    Console.WriteLine("1. Consultar registros");
+    Console.WriteLine("2. Criar registro");
+    Console.WriteLine("3. Editar registro");
+    Console.WriteLine("4. Deletar registro");
+    Console.WriteLine("5. Sair");
     Console.Write("Sua escolha: ");
     
     string? escolha = Console.ReadLine();
-    if (escolha == "3") break; 
+    if (escolha == "5") break; 
 
     switch (escolha)
     {
@@ -40,6 +41,9 @@ while (true)
             break;
         case "2":
             CriarRegistroEntidade(repository);
+            break;
+        case "3":
+            EditarEntidade(repository);
             break;
         case "4":
             DeletarEntidade(repository);
@@ -68,13 +72,12 @@ void ConsultarEntidade(Repository repository)
         var selectedType = entityTypes.ElementAt(consulta - 1);
         var method = typeof(ConsoleHelper).GetMethod(nameof(ConsoleHelper.PrintEntityData))!
             .MakeGenericMethod(new Type[] { selectedType });
-        method.Invoke(null, new object[] { repository, displayNames[consulta - 1]});
+        method.Invoke(null, new object[] { repository, displayNames[consulta - 1], null!});
     }
     else
     {
         Console.WriteLine("Opção inválida. Tente novamente.");
     }
-    
 }
 
 void CriarRegistroEntidade(Repository repository)
@@ -92,11 +95,12 @@ void CriarRegistroEntidade(Repository repository)
     {
         Console.WriteLine();
         var selectedType = entityTypes.ElementAt(consulta - 1);
-        var method = typeof(ConsoleHelper).GetMethod(nameof(ConsoleHelper.CreateEntity))!
+        var method = typeof(ConsoleHelper).GetMethod(nameof(ConsoleHelper.CreateUpdateEntity))!
             .MakeGenericMethod(new Type[] { selectedType });
         try 
         {
-            method.Invoke(null, new object[] { repository, displayNames[consulta - 1]});
+            method.Invoke(null, new object[] { repository, displayNames[consulta - 1], null!});
+            Console.WriteLine("Entidade criada com sucesso !");
         }
         catch
         {
@@ -126,7 +130,7 @@ void DeletarEntidade(Repository repository)
         var selectedType = entityTypes.ElementAt(consulta - 1);
         var method = typeof(ConsoleHelper).GetMethod(nameof(ConsoleHelper.PrintEntityData))!
             .MakeGenericMethod(new Type[] { selectedType });
-        method.Invoke(null, new object[] { repository, displayNames[consulta - 1]});
+        method.Invoke(null, new object[] { repository, displayNames[consulta - 1], null!});
 
         Console.Write("Escreva o Id do registro para deleção: ");
         if(!int.TryParse(Console.ReadLine(), out int id))
@@ -139,11 +143,12 @@ void DeletarEntidade(Repository repository)
         try 
         {
             method.Invoke(repository, new object[] { id });
+            Console.WriteLine("Registro deletado com sucesso.");
         }
-        catch (Npgsql.PostgresException ex)
+        catch (TargetInvocationException ex)
         {
-            // verificar isso aqui
-            if (ex.SqlState == "23503")
+            if (ex.InnerException is PostgresException && 
+                ex.InnerException.Message.Contains("violates foreign key constraint"))
             {
                 Console.WriteLine("Não foi possível deletar o registro pois ele está sendo referenciado por outra tabela.");
             }
@@ -157,6 +162,54 @@ void DeletarEntidade(Repository repository)
             Console.WriteLine("Não foi possível deletar a entidade. Verifique se o Id foi informado corretamente.");
         }
 
+    }
+    else
+    {
+        Console.WriteLine("Opção inválida. Tente novamente.");
+    }
+}
+
+void EditarEntidade(Repository repository)
+{
+    Console.WriteLine("\nSelecione uma entidade para editar:");
+
+    int index = 1;
+    foreach (var displayName in displayNames) Console.WriteLine($"{index++}. {displayName}");
+    Console.WriteLine($"{index}. Sair");
+    Console.Write("Sua escolha: ");
+
+    int.TryParse(Console.ReadLine(), out int consulta);
+
+    if (consulta >= 1 && consulta < index)
+    {
+        Console.WriteLine();
+        var selectedType = entityTypes.ElementAt(consulta - 1);
+        var method = typeof(ConsoleHelper).GetMethod(nameof(ConsoleHelper.PrintEntityData))!
+            .MakeGenericMethod(new Type[] { selectedType });
+        method.Invoke(null, new object[] { repository, displayNames[consulta - 1], null!});
+
+        Console.Write("Escreva o Id do registro para edição: ");
+        if(!int.TryParse(Console.ReadLine(), out int id))
+        {
+            Console.WriteLine("Opção inválida. Tente novamente.");
+            return;
+        }
+        method = typeof(ConsoleHelper).GetMethod(nameof(ConsoleHelper.PrintEntityData))!
+            .MakeGenericMethod(new Type[] { selectedType });
+        method.Invoke(null, new object[] { repository, displayNames[consulta - 1], id});
+
+        Console.WriteLine();
+        method = typeof(ConsoleHelper).GetMethod(nameof(ConsoleHelper.CreateUpdateEntity))!
+            .MakeGenericMethod(new Type[] { selectedType });
+        try 
+        {
+            method.Invoke(null, new object[] { repository, displayNames[consulta - 1], id });
+            Console.WriteLine("Entidade editada com sucesso !");
+        }
+        catch
+        {
+            Console.WriteLine("Não foi possível editar a entidade. Verifique se os dados foram preenchidos corretamente.");
+        }
     }
     else
     {

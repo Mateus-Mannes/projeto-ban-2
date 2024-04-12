@@ -70,4 +70,35 @@ public class Repository
 
         _connection.Execute(query, new { Id = id });
     }
+
+    public void Update<T>(int id, string[] values) where T : QueryableEntity
+    {
+        var tableName = QueryableEntity.TableName<T>();
+
+        var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            .Where(p => p.Name != "Id");
+
+        var setClause = string.Join(", ", properties.Select((p, index) => 
+            $"{p.GetCustomAttribute<ColumnAttribute>()!.Name} = @param{index}"));
+
+        var query = $"UPDATE {tableName} SET {setClause} WHERE Id = @Id";
+
+        var parameterDictionary = new DynamicParameters();
+        int i = 0;
+        foreach (var property in properties)
+        {
+            if (i < values.Length)
+            {
+                var propertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
+                // Converte o valor para o tipo correto da propriedade, tratando nulls de forma apropriada
+                var safeValue = (values[i] == null) ? null : Convert.ChangeType(values[i], propertyType);
+                parameterDictionary.Add($"param{i}", safeValue);
+            }
+            i++;
+        }
+
+        parameterDictionary.Add("Id", id);
+
+        _connection.Execute(query, parameterDictionary);
+    }
 }

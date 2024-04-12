@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
 using System.Reflection;
 using System.Text;
 
 namespace GestaoVarejo;
 
-public class QueryableEntity
+public abstract class QueryableEntity : IEntity
 {
+    public abstract int Id { get; set; }
+
     public static string TableName<T>() where T : QueryableEntity 
         => typeof(T).GetCustomAttribute<TableAttribute>()!.Name;
 
@@ -80,10 +81,20 @@ public class QueryableEntity
                 .FirstOrDefault() as DisplayAttribute;
 
             var displayName = displayAttribute != null ? displayAttribute.Name : property.Name;
-            var value = property.GetValue(this, null) ?? "null";
+            var value = property.GetValue(this, null);
 
-            sb.Append($"{displayName}: {value}, ");
-        }
+            // Verifica se o valor é um DateTime ou DateTime nullable
+            if (value is DateTime dateValue)
+            {
+                value = dateValue.ToString("yyyy-MM-dd");  // Formata a data como "yyyy-MM-dd"
+            }
+            else if (value == null)
+            {
+                value = "null";
+            }
+
+                sb.Append($"{displayName}: {value}, ");
+            }
 
         if (sb.Length > 0)
         {

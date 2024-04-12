@@ -9,7 +9,7 @@ public class Produto  : QueryableEntity
 {
     [Column("id")]
     [DisplayName("Id")]
-    public int Id { get; set; }
+    public override int Id { get; set; }
     [Column("catalogo_produto_id")]
     [DisplayName("Catalogo Produto Id")]
     public int CatalogoProdutoId { get; set; } 

@@ -9,7 +9,7 @@ public class Endereco  : QueryableEntity
 {
     [Column("id")]
     [Display(Name = "Id")]
-    public int Id { get; set; }
+    public override int Id { get; set; }
     [Column("cidade")]
     [Display(Name = "Cidade")]
     public string Cidade { get; set; } = string.Empty;

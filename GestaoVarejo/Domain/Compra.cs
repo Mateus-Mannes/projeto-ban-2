@@ -9,7 +9,7 @@ public class Compra : QueryableEntity
 { 
     [Column("id")]
     [Display(Name = "Id")]
-    public int Id { get; set; }
+    public override int Id { get; set; }
     [Column("nfe")]
     [Display(Name = "NFE")]
     public string Nfe { get; set; } = string.Empty;

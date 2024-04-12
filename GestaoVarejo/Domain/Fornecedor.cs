@@ -9,7 +9,7 @@ public class Fornecedor : QueryableEntity
 {
     [Column("id")]
     [Display(Name = "Id")]
-    public int Id { get; set; }
+    public override int Id { get; set; }
     [Column("nome")]
     [Display(Name = "Nome")]
     public string Cnpj { get; set; } = string.Empty;

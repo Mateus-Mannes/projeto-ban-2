@@ -9,7 +9,7 @@ public class Categoria : QueryableEntity
 {
     [Column("id")]
     [Display(Name = "Id")]
-    public int Id { get; set; }
+    public override int Id { get; set; }
     [Column("nome")]
     [Display(Name = "Nome")]
     public string Nome { get; set; } = string.Empty;
