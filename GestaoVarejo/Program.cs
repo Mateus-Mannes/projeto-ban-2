@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using Dapper;
 using GestaoVarejo;
-using GestaoVarejo.Domain;
 using Npgsql;
 
 
@@ -13,6 +11,7 @@ var dataSourceBuilder = new NpgsqlDataSourceBuilder(connString);
 var dataSource = dataSourceBuilder.Build();
 var conn = await dataSource.OpenConnectionAsync();
 var repository = new Repository(conn);
+var reportService = new ReportService(conn);
 
 var entityTypes = Assembly.GetExecutingAssembly().GetTypes()
     .Where(t => t.IsSubclassOf(typeof(QueryableEntity)) && !t.IsAbstract);
@@ -28,11 +27,12 @@ while (true)
     Console.WriteLine("2. Criar registro");
     Console.WriteLine("3. Editar registro");
     Console.WriteLine("4. Deletar registro");
-    Console.WriteLine("5. Sair");
+    Console.WriteLine("5. Relatórios");
+    Console.WriteLine("6. Sair");
     Console.Write("Sua escolha: ");
     
     string? escolha = Console.ReadLine();
-    if (escolha == "5") break; 
+    if (escolha == "6") break; 
 
     switch (escolha)
     {
@@ -48,9 +48,45 @@ while (true)
         case "4":
             DeletarEntidade(repository);
             break;
+        case "5":
+            ShowRelatoriosSubMenu(reportService);
+            break;
         default:
             Console.WriteLine("Opção inválida. Tente novamente.");
             break;
+    }
+}
+
+void ShowRelatoriosSubMenu(ReportService reportService)
+{
+    while (true)
+    {
+        Console.WriteLine("\nEscolha um relatório:");
+        Console.WriteLine("1. Top 3 Vendedores do Último Mês");
+        Console.WriteLine("2. Top Clientes do Último Mês");
+        Console.WriteLine("3. Vendas por Região do Último Mês");
+        Console.WriteLine("4. Voltar");
+
+        Console.Write("Sua escolha: ");
+        string? escolha = Console.ReadLine();
+
+        switch (escolha)
+        {
+            case "1":
+                ConsultarTopVendedoresUltimoMes(reportService);
+                break;
+            case "2":
+                ConsultarTopClientesUltimoMes(reportService);
+                break;
+            case "3":
+                ConsultarVendasPorRegiaoUltimoMes(reportService);
+                break;
+            case "4":
+                return;
+            default:
+                Console.WriteLine("Opção inválida. Tente novamente.");
+                break;
+        }
     }
 }
 
@@ -217,6 +253,75 @@ void EditarEntidade(Repository repository)
     }
 }
 
+void ConsultarTopVendedoresUltimoMes(ReportService reportService)
+{
+    Console.WriteLine("\nConsultando Top 3 Vendedores do Último Mês...\n");
 
+    var topVendedores = reportService.GetTopBestSellersLastMonth();
 
+    if (topVendedores != null && topVendedores.Any())
+    {
+        Console.WriteLine("Top 3 Vendedores do Último Mês:");
+        for (int i = 0; i < topVendedores.Count; i++)
+        {
+            var (nomeFuncionario, valorTotalVendas) = topVendedores[i];
+            Console.WriteLine($"Posição {i + 1}: {nomeFuncionario} - Total de Vendas: R$ {valorTotalVendas:N2}");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Nenhum vendedor encontrado ou não há dados suficientes para determinar o top 3 do último mês.");
+    }
+}
 
+void ConsultarTopClientesUltimoMes(ReportService reportService)
+{
+    Console.WriteLine("\nConsultando Top Clientes do Último Mês...\n");
+
+    var topClients = reportService.GetTopClientsLastMonth();
+
+    if (topClients.Count > 0)
+    {
+        Console.WriteLine("Top Clientes no último mês:");
+        foreach (var client in topClients)
+        {
+            Console.WriteLine($"Nome: {client.NomeCliente} - Valor Total Compras: R$ {client.ValorTotalCompras:N2}");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Nenhum cliente encontrado no último mês.");
+    }
+}
+
+void ConsultarVendasPorRegiaoUltimoMes(ReportService reportService)
+{
+    Console.WriteLine("\nConsultando Vendas por Região no Último Mês...\n");
+
+    var salesByRegion = reportService.GetSalesByRegionLastMonth();
+
+    if (salesByRegion.Count > 0)
+    {
+        Console.WriteLine("Relatório de Vendas por Região:");
+
+        string lastState = null!;  // Variável para armazenar o último estado exibido
+
+        foreach (var sale in salesByRegion)
+        {
+            if (sale.Estado != lastState)
+            {
+                Console.WriteLine($"Estado: {sale.Estado}");
+                lastState = sale.Estado;
+            }
+
+            Console.WriteLine($"  - Funcionário: {sale.NomeFuncionario}");
+            Console.WriteLine($"  - Cliente: {sale.NomeCliente}");
+            Console.WriteLine($"  - Data da Venda: {sale.DataVenda}");
+            Console.WriteLine($"  - Valor Total da Venda: R$ {sale.ValorTotalVenda:N2}\n");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Nenhuma venda encontrada por região no último mês.");
+    }
+}
