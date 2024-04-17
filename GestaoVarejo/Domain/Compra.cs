@@ -16,9 +16,6 @@ public class Compra : QueryableEntity
     [Column("data")]
     [Display(Name = "Data")]
     public DateTime Data { get; set; } = DateTime.Now;
-    [Column("valor_total")]
-    [Display(Name = "Valor Total")]
-    public decimal ValorTotal { get; set; }
     [Column("fornecedor_id")]
     [Display(Name = "Fornecedor Id")]
     [Fk<Fornecedor>]

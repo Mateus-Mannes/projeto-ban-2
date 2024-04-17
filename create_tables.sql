@@ -46,7 +46,6 @@ CREATE TABLE compra (
     id SERIAL PRIMARY KEY,
     nfe VARCHAR(255) NOT NULL,
     data DATE NOT NULL,
-    valor_total NUMERIC(10, 2) NOT NULL,
     fornecedor_id INTEGER REFERENCES fornecedor(id)
 );
 
@@ -55,7 +54,7 @@ CREATE TABLE venda (
     id SERIAL PRIMARY KEY,
     nfe VARCHAR(255) NOT NULL,
     data DATE NOT NULL,
-    valor_total NUMERIC(10, 2) NOT NULL,
+    valor NUMERIC(10, 2) NOT NULL,
     cliente_id INTEGER REFERENCES cliente(id),
     funcionario_id INTEGER REFERENCES funcionario(id)
 );
