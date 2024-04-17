@@ -413,7 +413,6 @@ void ConsultarComprasProdutosPorPeriodo(ReportService reportService)
                     Console.WriteLine($"   - Valor Unitário Compra: R$ {purchase.ValorUnitarioCompra:N2}");
                     Console.WriteLine($"   - Fornecedor: {purchase.EmailFornecedor}");
                     Console.WriteLine($"   - Data da Compra: {purchase.DataCompra:yyyy-MM-dd}");
-                    Console.WriteLine($"   - Valor Total da Compra: R$ {purchase.ValorTotalCompra:N2}");
                     Console.WriteLine();
                 }
             }

@@ -16,7 +16,7 @@ public class ReportService
     {
         var query = @"
             SELECT CONCAT(f.nome, ' ', f.ultimo_nome) AS NomeFuncionario,
-                SUM(v.valor_total) AS ValorTotalVendas,
+                SUM(v.valor) AS ValorTotalVendas,
                 e.estado AS Estado
             FROM Venda v
             INNER JOIN Funcionario f ON v.funcionario_id = f.Id
@@ -24,7 +24,7 @@ public class ReportService
             WHERE v.data >= @DataInicial
                 AND v.data < @DataFinal
             GROUP BY NomeFuncionario, Estado
-            ORDER BY SUM(v.valor_total) DESC
+            ORDER BY SUM(v.valor) DESC
             LIMIT 3
             ";
 
@@ -43,7 +43,7 @@ public class ReportService
     {
         var query = @"
             SELECT CONCAT(c.nome, ' ', c.ultimo_nome) AS NomeCliente,
-                SUM(v.valor_total) AS ValorTotalCompras,
+                SUM(v.valor) AS ValorTotalCompras,
                 e.cidade AS Cidade,
                 e.estado AS Estado
             FROM Cliente c
@@ -52,7 +52,7 @@ public class ReportService
             WHERE v.data >= @DataInicial
                 AND v.data < @DataFinal
             GROUP BY NomeCliente, Cidade, Estado
-            ORDER BY SUM(v.valor_total) DESC
+            ORDER BY SUM(v.valor) DESC
             LIMIT 3;
         ";
 
@@ -74,7 +74,7 @@ public class ReportService
                 CONCAT(f.nome, ' ', f.ultimo_nome) AS NomeFuncionario,
                 CONCAT(c.nome, ' ', c.ultimo_nome) AS NomeCliente,
                 v.data AS DataVenda,
-                v.valor_total AS ValorTotalVenda
+                v.valor AS ValorTotalVenda
             FROM Venda v
             INNER JOIN Funcionario f 
                 ON v.funcionario_id = f.id
@@ -102,8 +102,7 @@ public class ReportService
         DateTime DataCompra, 
         decimal ValorUnitarioCompra, 
         string NomeProduto, 
-        string EmailFornecedor, 
-        decimal ValorTotalCompra)> 
+        string EmailFornecedor)> 
     GetProductPurchaseInRange(DateTime dataInicial, DateTime dataFinal)
     {
         dataFinal = dataFinal.AddDays(1); // Adiciona 1 dia à data final para incluir o último dia no intervalo
@@ -115,8 +114,7 @@ public class ReportService
                 co.data AS DataCompra,
                 p.valor_unitario_compra AS ValorUnitarioCompra,
                 cp.nome AS NomeProduto,
-                f.email AS EmailFornecedor,
-                co.valor_total AS ValorTotalCompra
+                f.email AS EmailFornecedor
             FROM produto p
             INNER JOIN catalogo_produto cp 
                 ON p.catalogo_produto_id = cp.id
@@ -129,7 +127,7 @@ public class ReportService
             ORDER BY p.data_validade ASC;
         ";
 
-        var results = _dbContext.Query<(int, DateTime, DateTime?, DateTime, decimal, string, string, decimal)>(query,
+        var results = _dbContext.Query<(int, DateTime, DateTime?, DateTime, decimal, string, string)>(query,
             new
             {
                 DataInicial = dataInicial,
@@ -143,8 +141,7 @@ public class ReportService
             DataCompra: r.Item4,
             PrecoProduto: r.Item5,
             NomeProduto: r.Item6,
-            EmailFornecedor: r.Item7,
-            ValorTotalCompra: r.Item8
+            EmailFornecedor: r.Item7
         )).ToList();
 
         return purchases;
