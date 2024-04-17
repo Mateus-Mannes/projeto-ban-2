@@ -62,10 +62,11 @@ void ShowRelatoriosSubMenu(ReportService reportService)
     while (true)
     {
         Console.WriteLine("\nEscolha um relatório:");
-        Console.WriteLine("1. Top 3 Vendedores do Último Mês");
-        Console.WriteLine("2. Top Clientes do Último Mês");
-        Console.WriteLine("3. Vendas por Região do Último Mês");
-        Console.WriteLine("4. Voltar");
+        Console.WriteLine("1. Top 3 Vendedores Por Período");
+        Console.WriteLine("2. Top Clientes do Por Período");
+        Console.WriteLine("3. Vendas por Região Por Período");
+        Console.WriteLine("4. Compras por Período");
+        Console.WriteLine("5. Voltar");
 
         Console.Write("Sua escolha: ");
         string? escolha = Console.ReadLine();
@@ -73,15 +74,18 @@ void ShowRelatoriosSubMenu(ReportService reportService)
         switch (escolha)
         {
             case "1":
-                ConsultarTopVendedoresUltimoMes(reportService);
+                ConsultarTopVendedoresPeriodo(reportService);
                 break;
             case "2":
-                ConsultarTopClientesUltimoMes(reportService);
+                ConsultarTopClientesPorPeriodo(reportService);
                 break;
             case "3":
-                ConsultarVendasPorRegiaoUltimoMes(reportService);
+                ConsultarVendasPorRegiaoPorPeriodo(reportService);
                 break;
             case "4":
+                ConsultarComprasProdutosPorPeriodo(reportService);
+                break;
+            case "5":
                 return;
             default:
                 Console.WriteLine("Opção inválida. Tente novamente.");
@@ -253,75 +257,178 @@ void EditarEntidade(Repository repository)
     }
 }
 
-void ConsultarTopVendedoresUltimoMes(ReportService reportService)
+void ConsultarTopVendedoresPeriodo(ReportService reportService)
 {
-    Console.WriteLine("\nConsultando Top 3 Vendedores do Último Mês...\n");
+    Console.WriteLine("Por favor, informe a data inicial (no formato YYYY-MM-DD):");
+    string inputDataInicial = Console.ReadLine();
 
-    var topVendedores = reportService.GetTopBestSellersLastMonth();
+    Console.WriteLine("Por favor, informe a data final (no formato YYYY-MM-DD):");
+    string inputDataFinal = Console.ReadLine();
 
-    if (topVendedores != null && topVendedores.Any())
+    Console.WriteLine("Consultar Top Vendedores por Período...\n");
+
+    if (DateTime.TryParse(inputDataInicial, out DateTime dataInicial) && DateTime.TryParse(inputDataFinal, out DateTime dataFinal))
     {
-        Console.WriteLine("Top 3 Vendedores do Último Mês:");
-        for (int i = 0; i < topVendedores.Count; i++)
+        // Adiciona 1 dia à data final para incluir o último dia no intervalo
+        dataFinal = dataFinal.AddDays(1);
+
+        var topVendedores = reportService.GetTopBestSellersInRange(dataInicial, dataFinal);
+
+        if (topVendedores != null && topVendedores.Any())
         {
-            var (nomeFuncionario, valorTotalVendas) = topVendedores[i];
-            Console.WriteLine($"Posição {i + 1}: {nomeFuncionario} - Total de Vendas: R$ {valorTotalVendas:N2}");
-        }
-    }
-    else
-    {
-        Console.WriteLine("Nenhum vendedor encontrado ou não há dados suficientes para determinar o top 3 do último mês.");
-    }
-}
+            Console.WriteLine($"Top Vendedores do Período {dataInicial.ToString("yyyy-MM-dd")} a {dataFinal.AddDays(-1).ToString("yyyy-MM-dd")}:");
 
-void ConsultarTopClientesUltimoMes(ReportService reportService)
-{
-    Console.WriteLine("\nConsultando Top Clientes do Último Mês...\n");
+            int posicao = 1; // Inicializa a posição como 1
 
-    var topClients = reportService.GetTopClientsLastMonth();
-
-    if (topClients.Count > 0)
-    {
-        Console.WriteLine("Top Clientes no último mês:");
-        foreach (var client in topClients)
-        {
-            Console.WriteLine($"Nome: {client.NomeCliente} - Valor Total Compras: R$ {client.ValorTotalCompras:N2}");
-        }
-    }
-    else
-    {
-        Console.WriteLine("Nenhum cliente encontrado no último mês.");
-    }
-}
-
-void ConsultarVendasPorRegiaoUltimoMes(ReportService reportService)
-{
-    Console.WriteLine("\nConsultando Vendas por Região no Último Mês...\n");
-
-    var salesByRegion = reportService.GetSalesByRegionLastMonth();
-
-    if (salesByRegion.Count > 0)
-    {
-        Console.WriteLine("Relatório de Vendas por Região:");
-
-        string lastState = null!;  // Variável para armazenar o último estado exibido
-
-        foreach (var sale in salesByRegion)
-        {
-            if (sale.Estado != lastState)
+            foreach (var (nomeFuncionario, valorTotalVendas, estado) in topVendedores)
             {
-                Console.WriteLine($"Estado: {sale.Estado}");
-                lastState = sale.Estado;
+                Console.WriteLine($"Posição {posicao}: {nomeFuncionario} - Total de Vendas: R$ {valorTotalVendas:N2} - Estado: {estado}");
+                posicao++; // Incrementa a posição a cada iteração
             }
-
-            Console.WriteLine($"  - Funcionário: {sale.NomeFuncionario}");
-            Console.WriteLine($"  - Cliente: {sale.NomeCliente}");
-            Console.WriteLine($"  - Data da Venda: {sale.DataVenda}");
-            Console.WriteLine($"  - Valor Total da Venda: R$ {sale.ValorTotalVenda:N2}\n");
+        }
+        else
+        {
+            Console.WriteLine("Nenhum vendedor encontrado ou não há dados suficientes para determinar o top vendedores no período especificado.");
         }
     }
     else
     {
-        Console.WriteLine("Nenhuma venda encontrada por região no último mês.");
+        Console.WriteLine("Datas fornecidas são inválidas. Certifique-se de informar as datas no formato correto (YYYY-MM-DD).");
+    }
+}
+
+
+void ConsultarTopClientesPorPeriodo(ReportService reportService)
+{
+    Console.WriteLine("Por favor, informe a data inicial (no formato YYYY-MM-DD):");
+    string inputDataInicial = Console.ReadLine();
+
+    Console.WriteLine("Por favor, informe a data final (no formato YYYY-MM-DD):");
+    string inputDataFinal = Console.ReadLine();
+
+    Console.WriteLine("Consultando Top Clientes por Período...\n");
+
+    if (DateTime.TryParse(inputDataInicial, out DateTime dataInicial) && DateTime.TryParse(inputDataFinal, out DateTime dataFinal))
+    {
+        // Adiciona 1 dia à data final para incluir o último dia no intervalo
+        dataFinal = dataFinal.AddDays(1);
+
+        var topClients = reportService.GetTopClientsInRange(dataInicial, dataFinal);
+
+        if (topClients != null && topClients.Any())
+        {
+            Console.WriteLine($"Top Clientes no período {dataInicial.ToString("yyyy-MM-dd")} a {dataFinal.AddDays(-1).ToString("yyyy-MM-dd")}:");
+
+            foreach (var (nomeCliente, valorTotalCompras, cidade, estado) in topClients)
+            {
+                Console.WriteLine($"Nome: {nomeCliente} - Valor Total Compras: R$ {valorTotalCompras:N2} - Cidade: {cidade}, {estado}");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Nenhum cliente encontrado no período especificado.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Datas fornecidas são inválidas. Certifique-se de informar as datas no formato correto (YYYY-MM-DD).");
+    }
+}
+
+
+void ConsultarVendasPorRegiaoPorPeriodo(ReportService reportService)
+{
+    Console.WriteLine("Por favor, informe a data inicial (no formato YYYY-MM-DD):");
+    string inputDataInicial = Console.ReadLine();
+
+    Console.WriteLine("Por favor, informe a data final (no formato YYYY-MM-DD):");
+    string inputDataFinal = Console.ReadLine();
+
+    Console.WriteLine("Consultando Vendas por Região por Período...\n");
+
+    if (DateTime.TryParse(inputDataInicial, out DateTime dataInicial) && DateTime.TryParse(inputDataFinal, out DateTime dataFinal))
+    {
+        // Adiciona 1 dia à data final para incluir o último dia no intervalo
+        dataFinal = dataFinal.AddDays(1);
+
+        var salesByRegion = reportService.GetSalesByRegionInRange(dataInicial, dataFinal);
+
+        if (salesByRegion != null && salesByRegion.Any())
+        {
+            Console.WriteLine($"Relatório de Vendas por Região no período {dataInicial.ToString("yyyy-MM-dd")} a {dataFinal.AddDays(-1).ToString("yyyy-MM-dd")}:");
+
+            string lastState = null!;  // Variável para armazenar o último estado exibido
+
+            foreach (var sale in salesByRegion)
+            {
+                if (sale.Estado != lastState)
+                {
+                    Console.WriteLine($"Estado: {sale.Estado}");
+                    lastState = sale.Estado;
+                }
+
+                Console.WriteLine($"  - Funcionário: {sale.NomeFuncionario}");
+                Console.WriteLine($"  - Cliente: {sale.NomeCliente}");
+                Console.WriteLine($"  - Data da Venda: {sale.DataVenda}");
+                Console.WriteLine($"  - Valor Total da Venda: R$ {sale.ValorTotalVenda:N2}\n");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Nenhuma venda encontrada por região no período especificado.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Datas fornecidas são inválidas. Certifique-se de informar as datas no formato correto (YYYY-MM-DD).");
+    }
+}
+
+void ConsultarComprasProdutosPorPeriodo(ReportService reportService)
+{
+    Console.WriteLine("Por favor, informe a data inicial (no formato YYYY-MM-DD):");
+    string inputDataInicial = Console.ReadLine();
+
+    Console.WriteLine("Por favor, informe a data final (no formato YYYY-MM-DD):");
+    string inputDataFinal = Console.ReadLine();
+
+    Console.WriteLine("Consulta de Compras de Produtos por Período");
+    Console.WriteLine("--------------------------------------------");
+
+    if (DateTime.TryParse(inputDataInicial, out DateTime dataInicial) && DateTime.TryParse(inputDataFinal, out DateTime dataFinal))
+    {
+        try
+        {
+            var purchases = reportService.GetProductPurchaseInRange(dataInicial, dataFinal);
+
+            if (purchases.Count > 0)
+            {
+                Console.WriteLine($"\nCompras de Produtos no período de {dataInicial:yyyy-MM-dd} a {dataFinal:yyyy-MM-dd}:\n");
+
+                foreach (var purchase in purchases)
+                {
+                    Console.WriteLine($"Produto: {purchase.NomeProduto}");
+                    Console.WriteLine($"   - Data de Fabricação: {purchase.DataFabricacao:yyyy-MM-dd}");
+                    Console.WriteLine($"   - Data de Validade: {(purchase.DataValidade.HasValue ? purchase.DataValidade.Value.ToString("yyyy-MM-dd") : "N/A")}");
+                    Console.WriteLine($"   - Valor Unitário Compra: R$ {purchase.ValorUnitarioCompra:N2}");
+                    Console.WriteLine($"   - Fornecedor: {purchase.EmailFornecedor}");
+                    Console.WriteLine($"   - Data da Compra: {purchase.DataCompra:yyyy-MM-dd}");
+                    Console.WriteLine($"   - Valor Total da Compra: R$ {purchase.ValorTotalCompra:N2}");
+                    Console.WriteLine();
+                }
+            }
+            else
+            {
+                Console.WriteLine("Nenhuma compra de produtos encontrada no período especificado.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ocorreu um erro ao consultar as compras de produtos: {ex.Message}");
+        }
+    }
+    else
+    {
+        Console.WriteLine("Datas fornecidas são inválidas. Certifique-se de informar as datas no formato correto (YYYY-MM-DD).");
     }
 }
