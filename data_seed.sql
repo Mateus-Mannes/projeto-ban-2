@@ -71,12 +71,12 @@ INSERT INTO fornecedor (cnpj, email, telefone, endereco_id) VALUES
 ('88990011122377', 'pedido@fornecedor10.com', '8139001122', 2);
 
 -- Inserir registros em compra
-INSERT INTO compra (nfe, data, valor_total, fornecedor_id) VALUES
-('NFE456789', '2023-09-01', 4300.00, 1),
-('NFE567890', '2023-09-02', 2200.00, 2),
-('NFE678901', '2023-09-03', 3400.00, 3),
-('NFE789012', '2023-09-04', 2800.00, 4),
-('NFE890123', '2023-09-05', 1200.00, 5);
+INSERT INTO compra (nfe, data, fornecedor_id) VALUES
+('NFE456789', '2023-09-01', 1),
+('NFE567890', '2023-09-02', 2),
+('NFE678901', '2023-09-03', 3),
+('NFE789012', '2023-09-04', 4),
+('NFE890123', '2023-09-05', 5);
 
 -- Ajuste os IDs conforme necessário para os próximos INSERTS
 -- Inserir registros em produto
@@ -94,7 +94,7 @@ INSERT INTO produto (catalogo_produto_id, data_fabricacao, data_validade, valor_
 
 -- Inserir registros em venda
 -- Certifique-se de que cliente_id e funcionario_id correspondam a registros válidos
-INSERT INTO venda (nfe, data, valor_total, cliente_id, funcionario_id) VALUES
+INSERT INTO venda (nfe, data, valor, cliente_id, funcionario_id) VALUES
 ('VENDA45678', '2023-09-10', 2350.00, 1, 1),
 ('VENDA56789', '2023-09-11', 1300.00, 2, 2),
 ('VENDA67890', '2023-09-12', 2900.00, 3, 3);
