@@ -89,7 +89,7 @@ Categoria (#Id, Nome)
 | Nome do Campo | Descrição                                      | Tipo de Dado | Tamanho | Restrições do Domínio            |
 |---------------|------------------------------------------------|--------------|---------|----------------------------------|
 | #Id           | Identificador único do cliente (Primary Key)   | Inteiro      |         | Chave Primária, Auto Incremento  |
-| Cpf           | Número de CPF do cliente (opcional)            | Varchar      | 11      | Único (se fornecido)             |
+| [Cpf]         | Número de CPF do cliente (opcional)            | Varchar      | 11      | Único (se fornecido)             |
 | Nome          | Nome do cliente                                | Varchar      | 255     |                                  |
 | UltimoNome    | Último nome do cliente                         | Varchar      | 255     |                                  |
 | Telefone      | Número de telefone do cliente                  | Varchar      | 20      |                                  |
