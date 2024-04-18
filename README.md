@@ -5,7 +5,8 @@ Tema: Sistema para gerenciar uma loja de varejo.
 
 # Modelo conceitual:
 
-![image](https://github.com/Mateus-Mannes/projeto-ban-2/assets/64140337/a65497fa-2fc8-4bfe-90b6-4b8f72051e9f)
+![image](https://github.com/Mateus-Mannes/projeto-ban-2/assets/64140337/cfcf8dc5-c655-4315-bea6-b1d73cc4f6d1)
+
 
 # Modelo lógico:
 
