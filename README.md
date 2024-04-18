@@ -38,7 +38,7 @@ Categoria (#Id, Nome)
 | Cidade        | Nome da cidade                                 | Varchar      | 255     |                                  |
 | Bairro        | Nome do bairro                                 | Varchar      | 255     |                                  |
 | Rua           | Nome da rua                                    | Varchar      | 255     |                                  |
-| Numero        | Número do endereço                             | Inteiro      | 10      |                                  |
+| Numero        | Número do endereço                             | Inteiro      | 50      |                                  |
 | Estado        | Estado do endereço                             | Varchar      | 2       |                                  |
 
 ### Tabela: Fornecedor
@@ -46,7 +46,7 @@ Categoria (#Id, Nome)
 | Nome do Campo | Descrição                                      | Tipo de Dado | Tamanho | Restrições do Domínio            |
 |---------------|------------------------------------------------|--------------|---------|----------------------------------|
 | #Id           | Identificador único do fornecedor (Primary Key)| Inteiro      |         | Chave Primária, Auto Incremento  |
-| Cnpj          | Número de CNPJ do fornecedor (opcional)        | Varchar      | 18      | Único (se fornecido)             |
+| Cnpj          | Número de CNPJ do fornecedor (opcional)        | Varchar      | 14      | Único (se fornecido)             |
 | Email         | Endereço de e-mail do fornecedor               | Varchar      | 255     |                                  |
 | Telefone      | Número de telefone do fornecedor               | Varchar      | 20      |                                  |
 | &EnderecoId   | Chave estrangeira referenciando o endereço     | Inteiro      |         | Chave Estrangeira para Endereco  |
@@ -56,7 +56,7 @@ Categoria (#Id, Nome)
 | Nome do Campo | Descrição                                      | Tipo de Dado | Tamanho | Restrições do Domínio            |
 |---------------|------------------------------------------------|--------------|---------|----------------------------------|
 | #Id           | Identificador único da compra (Primary Key)    | Inteiro      |         | Chave Primária, Auto Incremento  |
-| Nfe           | Número da Nota Fiscal Eletrônica da compra     | Varchar      | 50      |                                  |
+| Nfe           | Número da Nota Fiscal Eletrônica da compra     | Varchar      | 255     |                                  |
 | Data          | Data da compra                                 | Date         |         |                                  |
 | &FornecedorId | Chave estrangeira referenciando o fornecedor   | Inteiro      |         | Chave Estrangeira para Fornecedor|
 
@@ -78,7 +78,7 @@ Categoria (#Id, Nome)
 | Nome do Campo   | Descrição                                      | Tipo de Dado | Tamanho | Restrições do Domínio            |
 |-----------------|------------------------------------------------|--------------|---------|----------------------------------|
 | #Id             | Identificador único da venda (Primary Key)     | Inteiro      |         | Chave Primária, Auto Incremento  |
-| Nfe             | Número da Nota Fiscal Eletrônica da venda      | Varchar      | 50      |                                  |
+| Nfe             | Número da Nota Fiscal Eletrônica da venda      | Varchar      | 255     |                                  |
 | Data            | Data da venda                                  | Date         |         |                                  |
 | Valor           | Valor da venda                                 | Decimal      | (10,2)  |                                  |
 | &ClienteId      | Chave estrangeira referenciando o cliente      | Inteiro      |         | Chave Estrangeira para Cliente   |
@@ -89,7 +89,7 @@ Categoria (#Id, Nome)
 | Nome do Campo | Descrição                                      | Tipo de Dado | Tamanho | Restrições do Domínio            |
 |---------------|------------------------------------------------|--------------|---------|----------------------------------|
 | #Id           | Identificador único do cliente (Primary Key)   | Inteiro      |         | Chave Primária, Auto Incremento  |
-| Cpf           | Número de CPF do cliente (opcional)            | Varchar      | 14      | Único (se fornecido)             |
+| Cpf           | Número de CPF do cliente (opcional)            | Varchar      | 11      | Único (se fornecido)             |
 | Nome          | Nome do cliente                                | Varchar      | 255     |                                  |
 | UltimoNome    | Último nome do cliente                         | Varchar      | 255     |                                  |
 | Telefone      | Número de telefone do cliente                  | Varchar      | 20      |                                  |
@@ -101,10 +101,10 @@ Categoria (#Id, Nome)
 | Nome do Campo | Descrição                                      | Tipo de Dado | Tamanho | Restrições do Domínio            |
 |---------------|------------------------------------------------|--------------|---------|----------------------------------|
 | #Id           | Identificador único do funcionário (Primary Key)| Inteiro      |         | Chave Primária, Auto Incremento |
-| Cpf           | Número de CPF do funcionário                    | Varchar      | 14      | Único                           |
+| Cpf           | Número de CPF do funcionário                    | Varchar      | 11      | Único                           |
 | Nome          | Nome do funcionário                             | Varchar      | 255     |                                 |
 | UltimoNome    | Último nome do funcionário                      | Varchar      | 255     |                                 |
-| Salario       | Salário do funcionário                          | Decimal      |         |                                 |
+| Salario       | Salário do funcionário                          | Decimal      | (10,2)  |                                 |
 | Email         | Endereço de e-mail do funcionário               | Varchar      | 255     |                                 |
 | &EnderecoId   | Chave estrangeira referenciando o endereço      | Inteiro      |         | Chave Estrangeira para Endereco |
 
@@ -114,7 +114,7 @@ Categoria (#Id, Nome)
 |-----------------|------------------------------------------------|--------------|---------|----------------------------------|
 | #Id             | Identificador único do catálogo (Primary Key)  | Inteiro      |         | Chave Primária, Auto Incremento  |
 | Nome            | Nome do produto                                | Varchar      | 255     |                                  |
-| Descricao       | Descrição do produto                           | Varchar      | 255     |                                  |
+| Descricao       | Descrição do produto                           | Text         |         |                                  |
 | Preco           | Preço do produto                               | Decimal      | (10,2)  |                                  |
 | &CategoriaId    | Chave estrangeira referenciando a categoria    | Inteiro      |         | Chave Estrangeira para Categoria |
 
