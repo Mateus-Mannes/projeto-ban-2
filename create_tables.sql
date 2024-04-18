@@ -5,7 +5,7 @@ CREATE TABLE endereco (
     bairro VARCHAR(255),
     rua VARCHAR(255),
     numero VARCHAR(50),
-    estado VARCHAR(255)
+    estado VARCHAR(2)
 );
 
 
