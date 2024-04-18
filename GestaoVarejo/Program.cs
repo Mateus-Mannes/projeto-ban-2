@@ -139,7 +139,7 @@ void CriarRegistroEntidade(Repository repository)
             .MakeGenericMethod(new Type[] { selectedType });
         try 
         {
-            method.Invoke(null, new object[] { repository, displayNames[consulta - 1], null!});
+            method.Invoke(null, new object[] { repository, displayNames[consulta - 1], null!, null!});
             Console.WriteLine("Entidade criada com sucesso !");
         }
         catch
@@ -243,7 +243,7 @@ void EditarEntidade(Repository repository)
             .MakeGenericMethod(new Type[] { selectedType });
         try 
         {
-            method.Invoke(null, new object[] { repository, displayNames[consulta - 1], id });
+            method.Invoke(null, new object[] { repository, displayNames[consulta - 1], id, null!});
             Console.WriteLine("Entidade editada com sucesso !");
         }
         catch
@@ -260,10 +260,10 @@ void EditarEntidade(Repository repository)
 void ConsultarTopVendedoresPeriodo(ReportService reportService)
 {
     Console.WriteLine("Por favor, informe a data inicial (no formato YYYY-MM-DD):");
-    string inputDataInicial = Console.ReadLine();
+    string inputDataInicial = Console.ReadLine()!;
 
     Console.WriteLine("Por favor, informe a data final (no formato YYYY-MM-DD):");
-    string inputDataFinal = Console.ReadLine();
+    string inputDataFinal = Console.ReadLine()!;
 
     Console.WriteLine("Consultar Top Vendedores por Período...\n");
 
@@ -301,10 +301,10 @@ void ConsultarTopVendedoresPeriodo(ReportService reportService)
 void ConsultarTopClientesPorPeriodo(ReportService reportService)
 {
     Console.WriteLine("Por favor, informe a data inicial (no formato YYYY-MM-DD):");
-    string inputDataInicial = Console.ReadLine();
+    string inputDataInicial = Console.ReadLine()!;
 
     Console.WriteLine("Por favor, informe a data final (no formato YYYY-MM-DD):");
-    string inputDataFinal = Console.ReadLine();
+    string inputDataFinal = Console.ReadLine()!;
 
     Console.WriteLine("Consultando Top Clientes por Período...\n");
 
@@ -339,10 +339,10 @@ void ConsultarTopClientesPorPeriodo(ReportService reportService)
 void ConsultarVendasPorRegiaoPorPeriodo(ReportService reportService)
 {
     Console.WriteLine("Por favor, informe a data inicial (no formato YYYY-MM-DD):");
-    string inputDataInicial = Console.ReadLine();
+    string inputDataInicial = Console.ReadLine()!;
 
     Console.WriteLine("Por favor, informe a data final (no formato YYYY-MM-DD):");
-    string inputDataFinal = Console.ReadLine();
+    string inputDataFinal = Console.ReadLine()!;
 
     Console.WriteLine("Consultando Vendas por Região por Período...\n");
 
@@ -387,10 +387,10 @@ void ConsultarVendasPorRegiaoPorPeriodo(ReportService reportService)
 void ConsultarComprasProdutosPorPeriodo(ReportService reportService)
 {
     Console.WriteLine("Por favor, informe a data inicial (no formato YYYY-MM-DD):");
-    string inputDataInicial = Console.ReadLine();
+    string inputDataInicial = Console.ReadLine()!;
 
     Console.WriteLine("Por favor, informe a data final (no formato YYYY-MM-DD):");
-    string inputDataFinal = Console.ReadLine();
+    string inputDataFinal = Console.ReadLine()!;
 
     Console.WriteLine("Consulta de Compras de Produtos por Período");
     Console.WriteLine("--------------------------------------------");

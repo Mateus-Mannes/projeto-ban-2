@@ -14,6 +14,24 @@ public class Repository
         _connection = connection;
     }
 
+    public void Execute(string query, DynamicParameters parameters) 
+    {
+        _connection.Execute(query, parameters);
+    }
+
+    public List<List<string>> ExecuteQuery(string query) 
+    {
+        var rows = _connection.Query(query);
+        var rowsValues = new List<List<string>>();
+        foreach (var row in rows)
+        {
+            var rowValues = new List<string>();
+            foreach (var column in row) rowValues.Add(column.Value?.ToString() ?? string.Empty);
+            rowsValues.Add(rowValues);
+        }
+        return rowsValues;
+    }
+
     public IEnumerable<T> GetAll<T>() where T : QueryableEntity
     {
         var query = $"SELECT * FROM {QueryableEntity.TableName<T>()}";
@@ -33,19 +51,20 @@ public class Repository
         return entities;
     }
 
-    public void Create<T>(string[] values) where T : QueryableEntity
+    public int Create<T>(string[] values) where T : QueryableEntity
     {
         var tableName = QueryableEntity.TableName<T>();
 
-        var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.Name != "Id");
+        var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                                .Where(p => p.Name != "Id");
 
         var columns = string.Join(", ", properties.Select(p => p.GetCustomAttribute<ColumnAttribute>()!.Name));
 
         var parameterNames = string.Join(", ", properties.Select((p, index) => $"@param{index}"));
 
-        var query = $"INSERT INTO {tableName} ({columns}) VALUES ({parameterNames})";
+        var query = $"INSERT INTO {tableName} ({columns}) VALUES ({parameterNames}) RETURNING Id";
 
-        // Cria um dicionário para mapear os valores aos parâmetros
+        // Create a dictionary to map the values to parameters
         var parameterDictionary = new DynamicParameters();
         int i = 0;
         foreach (var property in properties)
@@ -53,14 +72,15 @@ public class Repository
             if (i < values.Length)
             {
                 var propertyType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
-                // Converte o valor para o tipo correto da propriedade, tratando nulls de forma apropriada
-                var safeValue = (values[i] == null) ? null : Convert.ChangeType(values[i], propertyType);
+                // Convert the value to the correct property type, handling nulls appropriately
+                var safeValue = (values[i] == null || values[i] == string.Empty) ? null : Convert.ChangeType(values[i], propertyType);
                 parameterDictionary.Add($"param{i}", safeValue);
             }
             i++;
         }
         
-        _connection.Execute(query, parameterDictionary);
+        // Execute the insert and return the new ID
+        return _connection.QuerySingle<int>(query, parameterDictionary);
     }
 
     public void Delete<T>(int id) where T : QueryableEntity

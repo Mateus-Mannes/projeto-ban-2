@@ -1,36 +1,38 @@
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GestaoVarejo.Domain;
 
 [Table("produto")]
-[DisplayName("Produto")]
+[Display(Name = "Produto")]
 public class Produto  : QueryableEntity
 {
     [Column("id")]
-    [DisplayName("Id")]
+    [Display(Name = "Id")]
     public override int Id { get; set; }
     [Column("catalogo_produto_id")]
-    [DisplayName("Catalogo Produto Id")]
+    [Display(Name = "Catalogo Produto Id")]
+    [Fk<CatalogoProduto>]
     public int CatalogoProdutoId { get; set; } 
     [Column("data_fabricacao")]
-    [DisplayName("Data Fabricação")]
+    [Display(Name = "Data Fabricação")]
     public DateTime DataFabricacao { get; set; }
     [Column("data_validade")]
-    [DisplayName("Data Validade")]
+    [Display(Name = "Data Validade")]
     public DateTime? DataValidade { get; set; }
     [Column("data_entrega")]
-    [DisplayName("Data Entrega")]
+    [Display(Name = "Data Entrega")]
     public DateTime? DataEntrega { get; set; } 
     [Column("valor_unitario_compra")]
-    [DisplayName("Valor Unitário Compra")]
+    [Display(Name = "Valor Unitário Compra")]
     public decimal ValorUnitarioCompra { get; set; }
     [Column("compra_id")]
-    [DisplayName("Compra Id")]
+    [Display(Name = "Compra Id")]
     [Fk<Compra>]
     public int CompraId { get; set; } 
     [Column("venda_id")]
-    [DisplayName("Venda Id")]
+    [Display(Name = "Venda Id")]
     [Fk<Venda>]
     public int? VendaId { get; set; }
 }

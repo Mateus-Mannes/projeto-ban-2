@@ -18,7 +18,7 @@ public class Venda : QueryableEntity
     public DateTime Data { get; set; }
     [Column("valor")]
     [Display(Name = "Valor")]
-    public decimal ValorTotal { get; set; }
+    public decimal Valor { get; set; }
     [Column("cliente_id")]
     [Fk<Cliente>]
     [Display(Name = "Cliente Id")]
