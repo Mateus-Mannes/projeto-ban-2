@@ -116,9 +116,9 @@ public class ReportService
                 co.data AS DataCompra,
                 f.email AS EmailFornecedor,
                 cp.preco AS PrecoProduto,
-                FLOOR(SUM(p.valor_unitario_compra / cp.preco))::INTEGER AS QuantidadeComprada,
-                SUM(p.valor_unitario_compra) AS ValorTotalCompra,
-                SUM(p.valor_unitario_compra % cp.preco) AS Frete
+                FLOOR(SUM(p.valor_compra / cp.preco))::INTEGER AS QuantidadeComprada,
+                SUM(p.valor_compra) AS ValorTotalCompra,
+                SUM(p.valor_compra % cp.preco) AS Frete
             FROM 
                 produto p
             INNER JOIN catalogo_produto cp 

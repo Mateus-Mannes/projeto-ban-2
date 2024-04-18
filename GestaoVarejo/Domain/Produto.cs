@@ -24,8 +24,8 @@ public class Produto  : QueryableEntity
     [Column("data_entrega")]
     [Display(Name = "Data Entrega")]
     public DateTime? DataEntrega { get; set; } 
-    [Column("valor_unitario_compra")]
-    [Display(Name = "Valor Unitário Compra")]
+    [Column("valor_compra")]
+    [Display(Name = "Valor Compra")]
     public decimal ValorUnitarioCompra { get; set; }
     [Column("compra_id")]
     [Display(Name = "Compra Id")]

@@ -80,7 +80,7 @@ INSERT INTO compra (nfe, data, fornecedor_id) VALUES
 
 -- Ajuste os IDs conforme necessário para os próximos INSERTS
 -- Inserir registros em produto
-INSERT INTO produto (catalogo_produto_id, data_fabricacao, data_validade, valor_unitario_compra, compra_id) VALUES
+INSERT INTO produto (catalogo_produto_id, data_fabricacao, data_validade, valor_compra, compra_id) VALUES
 (1, '2023-08-01', '2024-08-01', 2150.00, 1),
 (2, '2023-08-05', NULL, 4250.00, 1),
 (3, '2023-08-10', '2024-08-10', 11600.00, 2),
