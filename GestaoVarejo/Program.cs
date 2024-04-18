@@ -63,7 +63,7 @@ void ShowRelatoriosSubMenu(ReportService reportService)
     {
         Console.WriteLine("\nEscolha um relatório:");
         Console.WriteLine("1. Top 3 Vendedores Por Período");
-        Console.WriteLine("2. Top Clientes do Por Período");
+        Console.WriteLine("2. Top Clientes Por Período");
         Console.WriteLine("3. Vendas por Região Por Período");
         Console.WriteLine("4. Compras por Período");
         Console.WriteLine("5. Voltar");
