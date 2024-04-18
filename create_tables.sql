@@ -5,7 +5,7 @@ CREATE TABLE endereco (
     bairro VARCHAR(255),
     rua VARCHAR(255),
     numero VARCHAR(50),
-    estado VARCHAR(255)
+    estado VARCHAR(2)
 );
 
 
@@ -80,7 +80,7 @@ CREATE TABLE produto (
     data_fabricacao DATE NOT NULL,
     data_validade DATE NULL,
     data_entrega DATE NULL,
-    valor_unitario_compra NUMERIC(10, 2) NOT NULL,
+    valor_compra NUMERIC(10, 2) NOT NULL,
     compra_id INTEGER REFERENCES compra(id),
     venda_id INTEGER REFERENCES venda(id) NULL
 );

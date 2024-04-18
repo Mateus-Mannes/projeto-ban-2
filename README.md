@@ -3,6 +3,36 @@ Projeto banco de dados 2
 
 Tema: Sistema para gerenciar uma loja de varejo.
 
+# Instruções para compilação e execução
+Para iniciar o projeto em um Codespace do GitHub, siga estas instruções:
+
+### Criar um Codespace
+
+1. **Acesse o Repositório:**
+   Navegue até o repositório do projeto no GitHub onde o código fonte está hospedado.
+
+2. **Abrir o Codespace:**
+   No repositório, clique no botão "Code" e selecione "Open with Codespaces". Isso abrirá o repositório em um novo Codespace.
+
+### Executar o Projeto
+
+Depois de ter o Codespace aberto com o projeto, siga os passos abaixo para executar o projeto:
+
+1. **Navegar até a Pasta do Projeto:**
+   Abra o terminal no Codespace. Você pode encontrar o terminal na barra lateral esquerda ou acessá-lo por meio do menu: `Terminal` > `New Terminal` ou pressionando " Ctrl + ' " no teclado.
+   
+   Em seguida, navegue até a pasta do projeto `GestaoVarejo` usando o seguinte comando:
+
+   ```bash
+   cd GestaoVarejo/
+   ```
+2. **Compilar e Executar o Projeto**
+   Uma vez que está na pasta GestaoVarejo, compile e execute o projeto usando o seguinte comando:
+   
+   ```code
+   dotnet run
+   ```
+Isso iniciará a execução do projeto no terminal do Codespace.
 # Modelo conceitual:
 
 ![image](https://github.com/Mateus-Mannes/projeto-ban-2/assets/64140337/cfcf8dc5-c655-4315-bea6-b1d73cc4f6d1)

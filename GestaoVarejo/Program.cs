@@ -63,7 +63,7 @@ void ShowRelatoriosSubMenu(ReportService reportService)
     {
         Console.WriteLine("\nEscolha um relatório:");
         Console.WriteLine("1. Top 3 Vendedores Por Período");
-        Console.WriteLine("2. Top Clientes do Por Período");
+        Console.WriteLine("2. Top Clientes Por Período");
         Console.WriteLine("3. Vendas por Região Por Período");
         Console.WriteLine("4. Compras por Período");
         Console.WriteLine("5. Voltar");
@@ -410,8 +410,11 @@ void ConsultarComprasProdutosPorPeriodo(ReportService reportService)
                     Console.WriteLine($"Produto: {purchase.NomeProduto}");
                     Console.WriteLine($"   - Data de Fabricação: {purchase.DataFabricacao:yyyy-MM-dd}");
                     Console.WriteLine($"   - Data de Validade: {(purchase.DataValidade.HasValue ? purchase.DataValidade.Value.ToString("yyyy-MM-dd") : "N/A")}");
-                    Console.WriteLine($"   - Valor Unitário Compra: R$ {purchase.ValorUnitarioCompra:N2}");
+                    Console.WriteLine($"   - Quantidade Comprada: {purchase.QuantidadeComprada}");
+                    Console.WriteLine($"   - Preço do Produto: {purchase.PrecoProduto:N2}");
+                    Console.WriteLine($"   - Valor Total Compra: R$ {purchase.ValorTotalCompra:N2}");
                     Console.WriteLine($"   - Fornecedor: {purchase.EmailFornecedor}");
+                    Console.WriteLine($"   - Frete: {purchase.Frete}");
                     Console.WriteLine($"   - Data da Compra: {purchase.DataCompra:yyyy-MM-dd}");
                     Console.WriteLine();
                 }
