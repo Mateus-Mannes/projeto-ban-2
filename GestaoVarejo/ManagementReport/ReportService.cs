@@ -96,26 +96,31 @@ public class ReportService
         return results;
     }
 
-    public List<(int ProdutoId, 
+    public List<(string NomeProduto, 
         DateTime DataFabricacao, 
         DateTime? DataValidade, 
-        DateTime DataCompra, 
-        decimal ValorUnitarioCompra, 
-        string NomeProduto, 
-        string EmailFornecedor)> 
+        DateTime DataCompra,
+        string EmailFornecedor,
+        decimal PrecoProduto,
+        int QuantidadeComprada,
+        decimal ValorTotalCompra,
+        decimal Frete)> 
     GetProductPurchaseInRange(DateTime dataInicial, DateTime dataFinal)
     {
         dataFinal = dataFinal.AddDays(1); // Adiciona 1 dia à data final para incluir o último dia no intervalo
 
         var query = @"
-            SELECT p.id AS ProdutoId,
+            SELECT cp.nome AS NomeProduto,
                 p.data_fabricacao AS DataFabricacao,
                 p.data_validade AS DataValidade,
                 co.data AS DataCompra,
-                p.valor_unitario_compra AS ValorUnitarioCompra,
-                cp.nome AS NomeProduto,
-                f.email AS EmailFornecedor
-            FROM produto p
+                f.email AS EmailFornecedor,
+                cp.preco AS PrecoProduto,
+                FLOOR(SUM(p.valor_unitario_compra / cp.preco))::INTEGER AS QuantidadeComprada,
+                SUM(p.valor_unitario_compra) AS ValorTotalCompra,
+                SUM(p.valor_unitario_compra % cp.preco) AS Frete
+            FROM 
+                produto p
             INNER JOIN catalogo_produto cp 
                 ON p.catalogo_produto_id = cp.id
             INNER JOIN compra co 
@@ -124,10 +129,25 @@ public class ReportService
                 ON co.fornecedor_id = f.id
             WHERE co.data >= @DataInicial
                 AND co.data < @DataFinal
-            ORDER BY p.data_validade ASC;
+            GROUP BY cp.nome,
+                p.data_fabricacao, 
+                p.data_validade, 
+                co.data,
+                cp.preco, 
+                f.email
+            ORDER BY DataValidade DESC;
         ";
 
-        var results = _dbContext.Query<(int, DateTime, DateTime?, DateTime, decimal, string, string)>(query,
+        var results = _dbContext
+        .Query<(string, 
+        DateTime, 
+        DateTime?,
+        DateTime,
+        string,
+        decimal,
+        int,
+        decimal,
+        decimal)>(query,
             new
             {
                 DataInicial = dataInicial,
@@ -135,13 +155,15 @@ public class ReportService
             }).AsList();
 
         var purchases = results.Select(r => (
-            ProdutoId: r.Item1,
+            NomeProduto: r.Item1,
             DataFabricacao: r.Item2,
             DataValidade: r.Item3,
             DataCompra: r.Item4,
-            PrecoProduto: r.Item5,
-            NomeProduto: r.Item6,
-            EmailFornecedor: r.Item7
+            EmailFornecedor: r.Item5,
+            PrecoProduto: r.Item6,
+            QuantidadeComprada: r.Item7,
+            ValorTotalCompra: r.Item8,
+            Frete: r.Item9
         )).ToList();
 
         return purchases;
