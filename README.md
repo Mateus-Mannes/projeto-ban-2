@@ -16,7 +16,7 @@ Fornecedor (#Id, [Cnpj], Email, Telefone, &EnderecoId)
 
 Compra (#Id, Nfe, Data, &FornecedorId)
 
-Produto (#Id, &CatalogoProdutoId, DataFabricacao, [DataValidade], DataEntrega, ValorUnitarioCompra, &CompraId, [&VendaId])
+Produto (#Id, &CatalogoProdutoId, DataFabricacao, [DataValidade], DataEntrega, ValorCompra, &CompraId, [&VendaId])
 
 Venda (#Id, Nfe, Data, Valor, &ClienteId, &FuncionarioId)
 
@@ -69,7 +69,7 @@ Categoria (#Id, Nome)
 | DataFabricacao      | Data de fabricação do produto                   | Date         |         |                                  |
 | [DataValidade]      | Data de validade do produto (opcional)          | Date         |         |                                  |
 | DataEntrega         | Data de entrega do produto                      | Date         |         |                                  |
-| ValorUnitarioCompra | Valor unitário de compra do produto             | Decimal      | (10,2)  |                                  |
+| ValorCompra         | Valor unitário de compra do produto             | Decimal      | (10,2)  |                                  |
 | &CompraId           | Chave estrangeira referenciando a compra        | Inteiro      |         | Chave Estrangeira para Compra    |
 | [&VendaId]          | Chave estrangeira opcional referenciando a venda| Inteiro      |         | Chave Estrangeira para Venda (opcional) |
 
