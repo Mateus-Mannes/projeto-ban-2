@@ -14,11 +14,11 @@ Endereco (#Id, Cidade, Bairro, Rua, Numero, Estado)
 
 Fornecedor (#Id, [Cnpj], Email, Telefone, &EnderecoId)
 
-Compra (#Id, Nfe, Data, ValorTotal, &FornecedorId)
+Compra (#Id, Nfe, Data, &FornecedorId)
 
 Produto (#Id, &CatalogoProdutoId, DataFabricacao, [DataValidade], DataEntrega, ValorUnitarioCompra, &CompraId, [&VendaId])
 
-Venda (#Id, Nfe, Data, ValorTotal, &ClienteId, &FuncionarioId)
+Venda (#Id, Nfe, Data, Valor, &ClienteId, &FuncionarioId)
 
 Cliente (#Id, [Cpf], Nome, UltimoNome, Telefone, Email, &EnderecoId)
 
@@ -58,7 +58,6 @@ Categoria (#Id, Nome)
 | #Id           | Identificador único da compra (Primary Key)    | Inteiro      |         | Chave Primária, Auto Incremento  |
 | Nfe           | Número da Nota Fiscal Eletrônica da compra     | Varchar      | 50      |                                  |
 | Data          | Data da compra                                 | Date         |         |                                  |
-| ValorTotal    | Valor total da compra                          | Decimal      | (10,2)  |                                  |
 | &FornecedorId | Chave estrangeira referenciando o fornecedor   | Inteiro      |         | Chave Estrangeira para Fornecedor|
 
 ### Tabela: Produto
@@ -81,7 +80,7 @@ Categoria (#Id, Nome)
 | #Id             | Identificador único da venda (Primary Key)     | Inteiro      |         | Chave Primária, Auto Incremento  |
 | Nfe             | Número da Nota Fiscal Eletrônica da venda      | Varchar      | 50      |                                  |
 | Data            | Data da venda                                  | Date         |         |                                  |
-| ValorTotal      | Valor total da venda                           | Decimal      | (10,2)  |                                  |
+| Valor           | Valor da venda                                 | Decimal      | (10,2)  |                                  |
 | &ClienteId      | Chave estrangeira referenciando o cliente      | Inteiro      |         | Chave Estrangeira para Cliente   |
 | &FuncionarioId  | Chave estrangeira referenciando o funcionário  | Inteiro      |         | Chave Estrangeira para Funcionario|
 
